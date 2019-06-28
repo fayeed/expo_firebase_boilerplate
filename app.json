@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "expo_firebase_boilerplate",
+    "slug": "expo_firebase_boilerplate",
+    "privacy": "unlisted",
+    "sdkVersion": "33.0.0",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "buildNumber": "1.0.0",
+      "supportsTablet": false,
+      "bundleIdentifier": "com.example.app"
+    },
+    "android": {
+      "versionCode": 1,
+      "icon": "./assets/images/icon.png",
+      "adaptiveIcon": {
+        "backgroundColor": "#112F41",
+        "foregroundImage": "./assets/images/icon.png"
+      },
+      "package": "com.example.app",
+      "permissions": [
+        "WRITE_CALENDAR",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "READ_CONTACTS",
+        "CAMERA",
+        "READ_CALENDAR",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "color": "#112F41",
+      "androidMode": "collapse"
+    }
+  }
+}
