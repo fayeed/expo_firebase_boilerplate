@@ -2,7 +2,6 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import React, { Component } from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Provider } from "react-redux";
 import createStore from "./redux";
@@ -20,7 +19,6 @@ class App extends Component {
 
   componentWillMount() {
     firebase.initializeApp(firebaseConfig);
-    const firestore = firebase.firestore();
   }
 
   render() {
@@ -59,9 +57,4 @@ function handleLoadingError(error) {
   console.warn(error);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  }
-});
+export default App;
