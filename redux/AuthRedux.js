@@ -4,31 +4,29 @@ import Immutable from "seamless-immutable";
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  logInWithEmailRequest: ["email", "password", "action"],
+  logInWithEmailRequest: ["email", "password", "actions", "navigate"],
   logInWithEmailResponse: ["user"],
   logInWithEmailError: ["error"],
-  logInWithGoogleRequest: null,
+  logInWithGoogleRequest: ["navigate"],
   logInWithGoogleResponse: ["user"],
   logInWithGoogleError: ["error"],
-  logInWithFacebookRequest: null,
+  logInWithFacebookRequest: ["navigate"],
   logInWithFacebookResponse: ["user"],
   logInWithFacebookError: ["error"],
-  registerWithEmailRequest: ["email", "password", "action"],
+  registerWithEmailRequest: ["email", "password", "actions", "navigate"],
   registerWithEmailResponse: ["user"],
   registerWithEmailError: ["error"],
-  registerWithGoogleRequest: null,
-  registerWithGoogleResponse: ["user"],
-  registerWithGoogleError: ["error"],
-  registerWithFacebookRequest: null,
-  registerWithFacebookResponse: ["user"],
-  registerWithFacebookError: ["error"],
   logoutRequest: null,
   logoutResponse: null,
   logoutError: ["error"],
   onBoardedShown: null,
-  forgotPasswordRequest: ["email", "action"],
+  forgotPasswordRequest: ["email", "actions", "navigate"],
   forgotPasswordResponse: null,
-  forgotPasswordError: ["error"]
+  forgotPasswordError: ["error"],
+  purge: null,
+  setPushTokenRequest: null,
+  setPushTokenResponse: ["token"],
+  setPushTokenError: ["error"]
 });
 
 export const AuthTypes = Types;
@@ -49,7 +47,7 @@ export const INITIAL_STATE = Immutable({
 export const logInWithEmailRequest = state => state.merge({ loading: true });
 
 export const logInWithEmailResponse = (state, { user }) =>
-  state.merge({ loading: false, error: null, user });
+  state.merge({ loading: false, error: null, user, loggedIn: true });
 
 export const logInWithEmailError = (state, { error }) =>
   state.merge({ loading: false, error });
@@ -73,27 +71,9 @@ export const logInWithGoogleError = (state, { error }) =>
 export const registerWithEmailRequest = state => state.merge({ loading: true });
 
 export const registerWithEmailResponse = (state, { user }) =>
-  state.merge({ loading: false, error: null, user });
+  state.merge({ loading: false, error: null, user, loggedIn: true });
 
 export const registerWithEmailError = (state, { error }) =>
-  state.merge({ loading: false, error });
-
-export const registerWithFacebookRequest = state =>
-  state.merge({ loading: true });
-
-export const registerWithFacebookResponse = (state, { user }) =>
-  state.merge({ loading: false, error: null, user });
-
-export const registerWithFacebookError = (state, { error }) =>
-  state.merge({ loading: false, error });
-
-export const registerWithGoogleRequest = state =>
-  state.merge({ loading: true });
-
-export const registerWithGoogleResponse = (state, { user }) =>
-  state.merge({ loading: false, error: null, user });
-
-export const registerWithGoogleError = (state, { error }) =>
   state.merge({ loading: false, error });
 
 export const logoutResponse = state =>
@@ -112,6 +92,20 @@ export const forgotPasswordResponse = state =>
 export const forgotPasswordError = (state, { error }) =>
   state.merge({ loading: false, error });
 
+export const purge = state =>
+  state.merge({
+    isOnBoarded: false,
+    loggedIn: false,
+    user: null,
+    loading: false,
+    error: null
+  });
+
+export const setPushTokenResponse = (state, { token }) =>
+  state.merge({ user: { ...state.user, pushToken: token } });
+
+export const setPushTokenError = (state, { error }) => state.merge({ error });
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -129,14 +123,11 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.REGISTER_WITH_EMAIL_REQUEST]: registerWithEmailRequest,
   [Types.REGISTER_WITH_EMAIL_RESPONSE]: registerWithEmailResponse,
   [Types.REGISTER_WITH_EMAIL_ERROR]: registerWithEmailError,
-  [Types.REGISTER_WITH_FACEBOOK_REQUEST]: registerWithFacebookRequest,
-  [Types.REGISTER_WITH_FACEBOOK_RESPONSE]: registerWithFacebookResponse,
-  [Types.REGISTER_WITH_FACEBOOK_ERROR]: registerWithFacebookError,
-  [Types.REGISTER_WITH_GOOGLE_REQUEST]: registerWithGoogleRequest,
-  [Types.REGISTER_WITH_GOOGLE_RESPONSE]: registerWithGoogleResponse,
-  [Types.REGISTER_WITH_GOOGLE_ERROR]: registerWithGoogleError,
   [Types.ON_BOARDED_SHOWN]: onBoardedShown,
   [Types.FORGOT_PASSWORD_REQUEST]: forgotPasswordRequest,
   [Types.FORGOT_PASSWORD_RESPONSE]: forgotPasswordResponse,
-  [Types.FORGOT_PASSWORD_ERROR]: forgotPasswordError
+  [Types.FORGOT_PASSWORD_ERROR]: forgotPasswordError,
+  [Types.PURGE]: purge,
+  [Types.SET_PUSH_TOKEN_RESPONSE]: setPushTokenResponse,
+  [Types.SET_PUSH_TOKEN_ERROR]: setPushTokenError
 });

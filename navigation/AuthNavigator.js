@@ -17,6 +17,6 @@ export default createStackNavigator(
   },
   {
     headerMode: "none",
-    initialRouteName: "ForgotPassword"
+    initialRouteName: "Login"
   }
 );

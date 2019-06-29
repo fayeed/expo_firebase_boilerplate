@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import configureStore from "./CreateStore";
-import rootSaga from "../sagas/";
+import rootSaga from "../sagas/index";
 import ReduxPersist from "../config/ReduxPersist";
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   nav: require("./NavigationRedux").reducer,
-  auth: require("./AuthRedux").reducer
+  auth: require("./AuthRedux").reducer,
+  main: require("./MainRedux").reducer
 });
 
 export default () => {

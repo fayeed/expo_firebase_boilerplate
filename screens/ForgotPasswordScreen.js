@@ -32,8 +32,11 @@ class ForgotPasswordScreen extends Component {
             email: ""
           }}
           onSubmit={(values, action) => {
-            this.props.forgotPassword(values.email, () =>
-              action.setSubmitting(false)
+            this.props.forgotPassword(
+              values.email,
+              () => action.setSubmitting(false),
+              (routeName, params) =>
+                this.props.navigation.navigate({ routeName, params })
             );
           }}
           validationSchema={validationSchema}
@@ -69,7 +72,8 @@ const mapStateToProps = ({ auth: { loading, error } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  forgotPassword: email => dispatch(AuthActions.forgotPasswordRequest(email))
+  forgotPassword: (email, actions, navigate) =>
+    dispatch(AuthActions.forgotPasswordRequest(email, actions, navigate))
 });
 
 export default connect(

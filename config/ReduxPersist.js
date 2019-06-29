@@ -3,7 +3,7 @@ import { AsyncStorage } from "react-native";
 
 const REDUX_PERSIST = {
   active: true,
-  reducerVersion: "1.00",
+  reducerVersion: "1.02",
   storeConfig: {
     key: "primary",
     storage: AsyncStorage,

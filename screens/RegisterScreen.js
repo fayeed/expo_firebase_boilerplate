@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import AuthActions from "../redux/AuthRedux";
 import FormInput from "../components/FormInput";
 import { Button, Icon } from "react-native-elements";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -40,91 +41,106 @@ const validationSchema = yup.object().shape({
 class RegisterScreen extends Component {
   render() {
     return (
-      <View style={Styles.container}>
-        <Text style={{ fontSize: 56 }}>Register</Text>
-        <Formik
-          initialValues={{
-            email: "",
-            password: "",
-            confirmPassword: ""
-          }}
-          onSubmit={(values, action) => {
-            this.props.registerWithEmail(values.email, values.password, () =>
-              action.setSubmitting(false)
-            );
-          }}
-          validationSchema={validationSchema}
-        >
-          {formikProps => (
-            <View style={Styles.form}>
-              <FormInput
-                label="Email"
-                formikProps={formikProps}
-                formikKey="email"
-                placeholder="jhondoe@example.com"
+      <KeyboardAwareScrollView>
+        <View style={Styles.container}>
+          <Text style={{ fontSize: 56 }}>Register</Text>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+              confirmPassword: ""
+            }}
+            onSubmit={(values, action) => {
+              this.props.registerWithEmail(
+                values.email,
+                values.password,
+                () => action.setSubmitting(false),
+                (routeName, params) =>
+                  this.props.navigation.navigate({ routeName, params })
+              );
+            }}
+            validationSchema={validationSchema}
+          >
+            {formikProps => (
+              <View style={Styles.form}>
+                <FormInput
+                  label="Email"
+                  formikProps={formikProps}
+                  formikKey="email"
+                  placeholder="jhondoe@example.com"
                 // autoFocus
-              />
-
-              <FormInput
-                label="Password"
-                formikProps={formikProps}
-                formikKey="password"
-                placeholder="password123"
-                secureTextEntry
-              />
-
-              <FormInput
-                label="Confirm Password"
-                formikProps={formikProps}
-                formikKey="confirmPassword"
-                placeholder="password123"
-                secureTextEntry
-              />
-
-              <Button
-                title="Register"
-                onPress={formikProps.handleSubmit}
-                loading={formikProps.isSubmitting}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-              />
-
-              <View style={Styles.row}>
-                <Icon
-                  type="font-awesome"
-                  name="google"
-                  color="red"
-                  reverse
-                  onPress={() => this.props.registerWithGoogle()}
-                  size={18}
                 />
-                <Icon
-                  name="facebook-f"
-                  type="font-awesome"
-                  color="blue"
-                  reverse
-                  onPress={() => this.props.registerWithFacebook()}
-                  size={18}
-                />
-              </View>
 
-              <View style={[Styles.row]}>
-                <Text>Already have an account</Text>
+                <FormInput
+                  label="Password"
+                  formikProps={formikProps}
+                  formikKey="password"
+                  placeholder="password123"
+                  secureTextEntry
+                />
+
+                <FormInput
+                  label="Confirm Password"
+                  formikProps={formikProps}
+                  formikKey="confirmPassword"
+                  placeholder="password123"
+                  secureTextEntry
+                />
+
                 <Button
-                  type="clear"
-                  title="Login"
-                  onPress={() =>
-                    this.props.navigation.navigate({ routeName: "Register" })
-                  }
-                  containerStyle={Styles.registerButtonContainer}
-                  buttonStyle={Styles.registeButton}
-                  titleStyle={Styles.registerTextStyle}
+                  title="Register"
+                  onPress={formikProps.handleSubmit}
+                  loading={formikProps.isSubmitting}
+                  containerStyle={Styles.buttonContainer}
+                  buttonStyle={Styles.button}
                 />
+
+                <View style={Styles.row}>
+                  <Icon
+                    type="font-awesome"
+                    name="google"
+                    color="red"
+                    reverse
+                    onPress={() =>
+                      this.props.registerWithGoogle((routeName, params) =>
+                        this.props.navigation.navigate({ routeName, params })
+                      )
+                    }
+                    size={18}
+                  />
+                  <Icon
+                    name="facebook-f"
+                    type="font-awesome"
+                    color="blue"
+                    reverse
+                    onPress={() =>
+                      this.props.registerWithFacebook((routeName, params) =>
+                        this.props.navigation.navigate({ routeName, params })
+                      )
+                    }
+                    size={18}
+                  />
+                </View>
+
+                <View style={[Styles.row]}>
+                  <Text>Already have an account</Text>
+                  <Button
+                    type="clear"
+                    title="Login"
+                    onPress={() =>
+                      this.props.navigation.navigate({ routeName: "Register" })
+                    }
+                    containerStyle={Styles.registerButtonContainer}
+                    buttonStyle={Styles.registeButton}
+                    titleStyle={Styles.registerTextStyle}
+                  />
+                </View>
               </View>
-            </View>
-          )}
-        </Formik>
-      </View>
+            )}
+          </Formik>
+        </View>
+      </KeyboardAwareScrollView>
+
     );
   }
 }
@@ -135,11 +151,14 @@ const mapStateToProps = ({ auth: { loading, error } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  registerWithEmail: (email, password, action) =>
-    dispatch(AuthActions.registerWithEmailRequest(email, password, action)),
-  registerWithGoogle: () => dispatch(AuthActions.registerWithGoogleRequest()),
-  registerWithFacebook: () =>
-    dispatch(AuthActions.registerWithFacebookRequest())
+  registerWithEmail: (email, password, actions, navigate) =>
+    dispatch(
+      AuthActions.registerWithEmailRequest(email, password, actions, navigate)
+    ),
+  registerWithGoogle: navigate =>
+    dispatch(AuthActions.logInWithGoogleRequest(navigate)),
+  registerWithFacebook: navigate =>
+    dispatch(AuthActions.logInWithFacebookRequest(navigate))
 });
 
 export default connect(

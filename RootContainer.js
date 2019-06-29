@@ -16,9 +16,9 @@ class RootContainer extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({});
+const mapStateToProps = ({ auth: { loggedIn } }) => ({ loggedIn });
 
 export default connect(
-  null,
-  mapDispatchToProps
+  mapStateToProps,
+  null
 )(RootContainer);

@@ -1,13 +1,14 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-around",
     flex: 1,
-    width: "100%"
+    width: width,
+    height: height
   },
   icon: {
     width: 150,
